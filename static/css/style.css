@@ -1,0 +1,246 @@
+/* 1. 全局变量定义：集中管理配色、圆角和阴影，方便统一修改 */
+:root {
+    --primary-color: #2563eb;   /* 主色调：蓝色 */
+    --accent-color: #7c3aed;    /* 强调色：紫色 */
+    --sponsor-color: #f59e0b;   /* 赞助颜色：橙色 */
+    --text-dark: #1f2937;       /* 深色文字：用于标题 */
+    --text-light: #6b7280;      /* 浅色文字：用于辅助信息 */
+    --bg-white: #ffffff;/* 纯白背景 */
+    --radius-xl: 1rem;  /* 中大圆角 */
+    --radius-2xl: 1.5rem;       /* 超大圆角 */
+    --shadow-xl: 0 20px 40px -10px rgba(0, 0, 0, 0.15); /* 悬浮阴影效果 */
+}
+
+/* 2. 基础重置与布局设定 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { height: 100%; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* 四色渐变背景 */
+    background: linear-gradient(-45deg, #f0f2f5, #e0e7ff, #f5f3ff, #f0f2f5);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite; /* 激活背景流动动画 */
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px; 
+    min-height: 100vh;
+    overflow-x: hidden; position: relative;
+}
+
+/* 3. 背景动态效果：流动的渐变色 */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 4. 装饰性漂浮元素：背景中的模糊圆圈 */
+.bg-element { position: fixed; z-index: -1; border-radius: 50%; background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%); pointer-events: none; }
+.bg-element-1 { width: 400px; height: 400px; top: -100px; right: -100px; animation: float 8s ease-in-out infinite; }
+.bg-element-2 { width: 300px; height: 300px; bottom: -50px; left: -50px; animation: float 10s ease-in-out infinite reverse; }
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, 50px) rotate(5deg); }
+    66% { transform: translate(-20px, 20px) rotate(-5deg); }
+}
+
+/* 5. 主信息面板卡片 */
+.info-panel {
+    background-color: var(--bg-white); border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl); position: relative; width: 100%;
+    max-width: 680px; overflow: hidden; opacity: 0;
+    transform: translateY(20px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    margin: auto; 
+}
+/* 面板顶部渐变装饰条 */
+.top-decorator { height: 6px; width: 100%; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); }
+.content-body { padding: 2.5rem 1.8rem 2rem; }
+
+/* 6. 头像与名称区域 */
+.avatar-section { text-align: center; margin-bottom: 1.5rem; }
+.avatar {
+    width: 100px; height: 100px; border-radius: 50%; border: 4px solid #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06); margin: 0 auto 1.2rem; overflow: hidden;
+    background: #f8fafc;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.name-title h1 { font-size: 1.8rem; color: var(--text-dark); margin-bottom: 0.2rem; }
+.name-title .title { color: var(--text-light); font-size: 0.9rem; letter-spacing: 0.5px; }
+
+/* 7. 分隔标签（如：SOCIAL, CONTACTS） */
+.section-label { 
+    font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; 
+    margin: 1.5rem 0 0.8rem; font-weight: 700; letter-spacing: 1px;
+    display: flex; align-items: center; width: 100%;
+}
+.section-label::after { content: ""; flex: 1; height: 1px; background: #f1f5f9; margin-left: 12px; }
+
+/* 8. 联系方式网格布局 */
+.contact-info { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+    gap: 1rem; 
+}
+.contact-link { text-decoration: none; display: block; color: inherit; position: relative; }
+
+/* 单个联系方式项 */
+.contact-item {
+    display: flex; align-items: center; padding: 1.1rem;
+    background-color: #f8fafc; border-radius: var(--radius-xl);
+    transition: all 0.3s ease; border: 1px solid transparent; cursor: pointer;
+    height: 100%; position: relative;
+}
+.contact-item:hover {
+    background-color: #fff; border-color: rgba(37, 99, 235, 0.15);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); transform: translateX(5px);
+}
+/* 图标容器样式 */
+.contact-icon {
+    flex-shrink: 0; width: 42px; height: 42px; background: #fff;
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    margin-right: 1rem; color: var(--primary-color); font-size: 1.1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    position: relative; 
+}
+.contact-details { flex: 1; min-width: 0; }
+.contact-details h3 { font-size: 0.65rem; color: var(--text-light); text-transform: uppercase; margin-bottom: 2px; }
+.contact-details p { 
+    font-size: 0.95rem; font-weight: 600; color: var(--text-dark); 
+    word-break: break-all; line-height: 1.2; 
+}
+
+/* 9. 状态点（在线/离线/检测中指示器） */
+.status-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    position: absolute; 
+    bottom: -2px; right: -2px; 
+    background: #e5e7eb;
+    border: 2px solid #f8fafc; 
+    z-index: 2;
+}
+.contact-item:hover .status-dot { border-color: #fff; }
+.status-dot.checking { background: #3b82f6; animation: statusPulse 1.5s infinite; }
+.status-dot.online { background: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.4); }
+.status-dot.offline { background: #ef4444; }
+@keyframes statusPulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+/* 10. WHOIS 查询触发按钮（悬浮在卡片上的小按钮） */
+.site-card-wrapper { position: relative; }
+.whois-trigger-btn {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    width: 32px; height: 32px; background: var(--primary-color);
+    color: white; border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; cursor: pointer; border: none; z-index: 10;
+    opacity: 0; transition: all 0.3s; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+.site-card-wrapper:hover .whois-trigger-btn { opacity: 1; right: 15px; }
+
+/* 11. 底部操作按钮区域（消息、赞助等） */
+.action-buttons { 
+    display: flex; 
+    flex-direction: row; 
+    gap: 0.8rem; 
+    margin-top: 1.5rem; 
+    width: 100%;
+}
+
+/* 通用按钮样式 */
+.message-btn {
+    flex: 1; padding: 1.1rem 0.5rem; border: none;
+    border-radius: var(--radius-xl); color: #fff; font-weight: 600; font-size: 0.95rem;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
+    white-space: nowrap;
+}
+.message-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.4); }
+/* 赞助按钮特定配色 */
+.sponsor-btn {
+    background: linear-gradient(90deg, var(--sponsor-color), #fbbf24);
+    box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.3);
+}
+.sponsor-btn:hover { box-shadow: 0 15px 25px -5px rgba(245, 158, 11, 0.4); }
+
+/* 12. 表单元素（用于联系或输入） */
+.form-group { text-align: left; margin-bottom: 1rem; }
+.form-control { width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid #e5e7eb; font-size: 0.95rem; outline: none; font-family: inherit; }
+.form-control:focus { border-color: var(--primary-color); }
+#formMessage { font-size: 0.85rem; margin-top: 10px; text-align: center; font-weight: 500; display: none; }
+.text-success { color: #10b981; }
+.text-danger { color: #dc2626; }
+.text-info { color: var(--text-light); }
+
+/* 13. 页脚信息 */
+.footer-info { margin-top: 2rem; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 1.2rem; }
+.copyright { font-size: 0.75rem; color: var(--text-light); }
+.footer-links { margin-top: 8px; }
+.footer-links a { color: #94a3b8; text-decoration: none; font-size: 0.7rem; margin: 0 5px; display: inline-block; }
+
+/* 14. 弹窗模态框（Modal） */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center; z-index: 1000;
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+.modal-content {
+    background: #fff; padding: 2rem; border-radius: 24px; width: 85%; max-width: 380px;
+    text-align: center; transform: scale(0.9); transition: 0.3s; position: relative;
+}
+.modal-overlay.active .modal-content { transform: scale(1); }
+.modal-close { position: absolute; top: 1rem; right: 1rem; border: none; background: none; font-size: 1.5rem; cursor: pointer; color: var(--text-light); z-index: 10; }
+
+/* 15. WHOIS 详情卡片（弹窗内部样式） */
+.whois-card { padding: 0 !important; overflow: hidden; max-width: 420px !important; text-align: left !important; }
+.whois-header { background: #f8fafc; padding: 2rem 1.5rem 1.5rem; border-bottom: 1px solid #f1f5f9; text-align: center; }
+.domain-display { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); }
+
+/* 统计数据平铺块 */
+.whois-grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 1.2rem; }
+.stat-tile { padding: 1.1rem; border-radius: 18px; color: white; display: flex; flex-direction: column; }
+.tile-age { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.tile-countdown { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.stat-tile .label { font-size: 0.65rem; opacity: 0.9; margin-bottom: 5px; font-weight: 600; }
+.stat-tile .value { font-size: 1rem; font-weight: 800; }
+.stat-tile .value b { font-size: 1.3rem; margin-right: 2px; }
+
+.whois-body { padding: 0 1.2rem 1.5rem; }
+/* 进度条：用于展示域名存续时间 */
+.domain-timeline { height: 6px; background: #f1f5f9; border-radius: 3px; margin-bottom: 1.5rem; overflow: hidden; }
+.timeline-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #3b82f6, #10b981); transition: width 1s ease-out; }
+
+/* 详细信息列表行 */
+.info-list { display: flex; flex-direction: column; gap: 10px; }
+.info-row { display: flex; align-items: center; font-size: 0.85rem; padding-bottom: 8px; border-bottom: 1px solid #f8fafc; }
+.info-row i { width: 25px; color: #94a3b8; font-size: 0.9rem; }
+.info-row .label { color: var(--text-light); width: 80px; flex-shrink: 0; }
+.info-row .content { color: var(--text-dark); font-weight: 600; flex: 1; text-align: right; word-break: break-all; }
+/* 状态标签（如：Active, Pending） */
+.tag-status { display: inline-block; padding: 2px 6px; border-radius: 4px; background: #f0fdf4; color: #16a34a; font-size: 0.65rem; font-weight: 700; margin-left: 4px; text-transform: uppercase; border: 1px solid #dcfce7; }
+
+/* 16. 支付/赞助 选项卡样式 */
+.pay-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 1.2rem; }
+.tab-btn { 
+    padding: 8px 20px; border-radius: 20px; border: 1px solid #e5e7eb; 
+    background: #f8fafc; font-size: 0.85rem; cursor: pointer; transition: 0.3s;
+    color: var(--text-light); font-weight: 600;
+}
+.tab-btn.active { background: var(--text-dark); color: #fff; border-color: var(--text-dark); }
+/* 二维码容器 */
+.qrcode-container { min-height: 200px; display: flex; flex-direction: column; align-items: center; }
+.qrcode { width: 200px; height: 200px; border-radius: 12px; margin-bottom: 10px; display: none; }
+.qrcode.active { display: block; animation: fadeIn 0.4s; }
+
+/* 17. 杂项（广告占位、邮件链接、动画） */
+.ads-container { margin-top: 1.5rem; overflow: hidden; border-radius: var(--radius-xl); }
+.modal-email-link { color: var(--text-light); text-decoration: none; transition: color 0.3s ease; display: inline-flex; align-items: center; }
+.modal-email-link:hover { color: var(--primary-color); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* 18. 响应式布局：针对移动端进行优化 */
+@media (max-width: 580px) {
+    .contact-info { grid-template-columns: 1fr; } /* 联系方式变为单列 */
+    .content-body { padding: 2rem 1.2rem; }
+    .action-buttons { gap: 0.5rem; }
+    .message-btn { font-size: 0.85rem; padding: 1rem 0.2rem; }
+}
